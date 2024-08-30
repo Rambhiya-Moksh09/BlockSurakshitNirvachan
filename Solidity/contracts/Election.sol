@@ -3,24 +3,17 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Election {
     mapping(address => bool) admins;
-    string name;
-    string description;
-    bool started;
-    bool ended;
+    string public name;
+    string public description;
+    bool public started;
+    bool public ended;
 
-    // to determine the admin
     constructor() {
         admins[msg.sender] = true;
         started = false;
         ended = false;
     }
 
-    // Getter function for admins mapping
-    function isAdmin(address _address) public view returns (bool) {
-        return admins[_address];
-    }
-
-    //creation of modifier to make admin level controls
     modifier onlyAdmin() {
         require(admins[msg.sender] == true, "Only Admin");
         _;
@@ -30,27 +23,24 @@ contract Election {
         admins[_address] = true;
     }
 
-    /*****************************CANDIDATES SECTION*****************************/
-
+    // *********************************************** CANDIDATE MANAGEMENT ***********************************************************\\\
     struct Candidate {
         string name;
         string info;
         bool exists;
     }
     mapping(string => Candidate) public candidates;
-    string[] candidateNames;
+    string[] public candidateNames;
 
     function addCandidate(
         string memory _candidateName,
         string memory _info
     ) public onlyAdmin {
-        Candidate memory newCandidate = Candidate({
+        candidates[_candidateName] = Candidate({
             name: _candidateName,
             info: _info,
             exists: true
         });
-
-        candidates[_candidateName] = newCandidate;
         candidateNames.push(_candidateName);
     }
 
@@ -58,8 +48,7 @@ contract Election {
         return candidateNames;
     }
 
-    /*****************************ELECTION SECTION*****************************/
-
+    //****************************************** ELECTION MANAGEMENT  *************************************************\\
     function setElectionDetails(
         string memory _name,
         string memory _description
@@ -82,69 +71,39 @@ contract Election {
         return candidateNames.length;
     }
 
-    /*****************************VOTER SECTION*****************************/
-
+    // **************************************************** VOTER & VOTING MANAGEMENT **************************************************\\
     struct Vote {
-        address voterAddress;
         string voterId;
-        string voterName;
         string candidate;
     }
-    Vote[] votes;
-    mapping(string => bool) public voterIds;
-    string[] votersArray;
+    Vote[] public votes;
+    mapping(bytes32 => bool) public hasVoted; // Hashed voter ID
 
-    function vote(
-        string memory _voterId,
-        string memory _voterName,
-        string memory _candidateName
-    ) public {
-        require(started == true && ended == false);
+    function vote(string memory _voterId, string memory _candidateName) public {
+        require(started && !ended, "Election not active");
         require(candidates[_candidateName].exists, "No such candidate");
-        require(!voterIds[_voterId], "Already Voted");
 
-        Vote memory newVote = Vote({
-            voterAddress: msg.sender,
-            voterId: _voterId,
-            voterName: _voterName,
-            candidate: _candidateName
-        });
+        bytes32 hashedVoterId = keccak256(abi.encodePacked(_voterId));
+        require(!hasVoted[hashedVoterId], "Already Voted");
 
-        votes.push(newVote);
-        voterIds[_voterId] = true;
-        votersArray.push(_voterId);
+        votes.push(Vote({voterId: _voterId, candidate: _candidateName}));
+        hasVoted[hashedVoterId] = true;
     }
-
-    function getVoters() public view returns (string[] memory) {
-        return votersArray;
-    }
-
-    /*****************************VOTING SECTION*****************************/
 
     function getVotes() public view onlyAdmin returns (Vote[] memory) {
         return votes;
     }
 
-    function getTotalVoter() public view returns (uint256) {
-        return votersArray.length;
-    }
-
     function endElection() public onlyAdmin {
-        require(started == true && ended == false);
-
-        started = true;
+        require(started == true && ended == false, "Election already ended");
         ended = true;
     }
 
     function resetElection() public onlyAdmin {
-        require(started == true && ended == true);
+        require(started == true && ended == true, "Election not ended");
 
         for (uint32 i = 0; i < candidateNames.length; i++) {
             delete candidates[candidateNames[i]];
-        }
-
-        for (uint32 i = 0; i < votersArray.length; i++) {
-            delete voterIds[votersArray[i]];
         }
 
         name = "";
@@ -152,21 +111,17 @@ contract Election {
 
         delete votes;
         delete candidateNames;
-        delete votersArray;
-
         started = false;
         ended = false;
     }
 
     function getStatus() public view returns (string memory) {
-        if (started == true && ended == true) {
+        if (started && ended) {
             return "finished";
         }
-
-        if (started == true && ended == false) {
+        if (started && !ended) {
             return "running";
         }
-
         return "not-started";
     }
 }
