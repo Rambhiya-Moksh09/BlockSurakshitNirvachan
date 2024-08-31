@@ -29,23 +29,51 @@ contract Election {
         string info;
         bool exists;
     }
-    mapping(string => Candidate) public candidates;
+    mapping(uint => Candidate) public candidates;
     string[] public candidateNames;
+    string[] public Info;
+    uint public candidateCount;
 
     function addCandidate(
         string memory _candidateName,
         string memory _info
     ) public onlyAdmin {
-        candidates[_candidateName] = Candidate({
+        candidates[candidateCount] = Candidate({
             name: _candidateName,
             info: _info,
             exists: true
         });
+        candidateCount++;
         candidateNames.push(_candidateName);
+        Info.push(_info);
     }
 
-    function getCandidates() public view returns (string[] memory) {
-        return candidateNames;
+    function getCandidates()
+        public
+        view
+        returns (string[] memory, string[] memory)
+    {
+        return (candidateNames, Info);
+    }
+
+    function deleteCandidate(uint256 index) public onlyAdmin {
+        require(index < candidateCount, "Invalid Candidate Index");
+        require(candidates[index].exists, "Candidate does not exist");
+
+        // Mark the candidate as deleted in the mapping
+        candidates[index].exists = false;
+
+        // Remove the candidate's name and info from the arrays
+        if (index < candidateNames.length - 1) {
+            candidateNames[index] = candidateNames[candidateNames.length - 1];
+            Info[index] = Info[Info.length - 1];
+        }
+
+        candidateNames.pop();
+        Info.pop();
+
+        // Decrease the candidate count
+        candidateCount--;
     }
 
     //****************************************** ELECTION MANAGEMENT  *************************************************\\
@@ -81,7 +109,7 @@ contract Election {
 
     function vote(string memory _voterId, string memory _candidateName) public {
         require(started && !ended, "Election not active");
-        require(candidates[_candidateName].exists, "No such candidate");
+        require(candidates[candidateCount].exists, "No such candidate");
 
         bytes32 hashedVoterId = keccak256(abi.encodePacked(_voterId));
         require(!hasVoted[hashedVoterId], "Already Voted");
@@ -102,15 +130,20 @@ contract Election {
     function resetElection() public onlyAdmin {
         require(started == true && ended == true, "Election not ended");
 
-        for (uint32 i = 0; i < candidateNames.length; i++) {
-            delete candidates[candidateNames[i]];
+        // Reset mapping by setting candidates as non-existent
+        for (uint i = 0; i < candidateCount; i++) {
+            candidates[i].exists = false;
         }
 
+        // Reset arrays
+        delete candidateNames;
+        delete Info;
+
+        // Reset other state variables
         name = "";
         description = "";
-
         delete votes;
-        delete candidateNames;
+        candidateCount = 0;
         started = false;
         ended = false;
     }
