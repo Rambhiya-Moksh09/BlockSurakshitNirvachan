@@ -1,10 +1,17 @@
+import crypto from 'crypto'
+
 import Voter from "../../models/voter.js";
+
 
 export const addVoterDetails = async (req, res) => {
     try {
-        const voter = new Voter(req.body);
-        /*const savedVoter =*/ await voter.save();
-        res.status(201).send({ message: 'Data Saved successfully', /*id: savedVoter._id */ });
+        const { name, age, voterId, state } = req.body;
+        const token = crypto.randomBytes(32).toString('hex');
+
+        const voter = new Voter({ name, age, voterId, state, token });
+        await voter.save();
+
+        res.status(201).send({ message: 'Data Saved successfully', id: savedVoter._id });
     } catch (error) {
         res.status(400).send({ message: 'Error saving data', error: error.message });
     }

@@ -18,6 +18,10 @@ const VoterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    token: {
+        type: String,
+        unique: true
+    }
 })
 
 const Voter = mongoose.model('Voter', VoterSchema);
