@@ -1,8 +1,9 @@
+import { ElectionAppBar } from "./components/ElectionAppBar";
 
 function App() {
   return (
     <div className="App">
-      <h1> APP </h1>
+      <ElectionAppBar />
     </div>
   );
 }
