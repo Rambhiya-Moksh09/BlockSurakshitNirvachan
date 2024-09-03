@@ -3,6 +3,8 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Election {
     mapping(address => bool) admins;
+    address[] public adminList;
+
     string public name;
     string public description;
     bool public started;
@@ -10,6 +12,7 @@ contract Election {
 
     constructor() {
         admins[msg.sender] = true;
+        adminList.push(msg.sender);
         started = false;
         ended = false;
     }
@@ -20,7 +23,13 @@ contract Election {
     }
 
     function addAdmin(address _address) public onlyAdmin {
+        require(!admins[_address], "Address is already an admin");
         admins[_address] = true;
+        adminList.push(_address);
+    }
+
+    function getAdmins() public view returns (address[] memory) {
+        return adminList;
     }
 
     // *********************************************** CANDIDATE MANAGEMENT ***********************************************************\\\
