@@ -11,7 +11,7 @@ export const addVoterDetails = async (req, res) => {
         const voter = new Voter({ name, age, voterId, state, token });
         await voter.save();
 
-        res.status(201).send({ message: 'Data Saved successfully', id: savedVoter._id });
+        res.status(201).send({ message: 'Data Saved successfully', id: voter._id });
     } catch (error) {
         res.status(400).send({ message: 'Error saving data', error: error.message });
     }
