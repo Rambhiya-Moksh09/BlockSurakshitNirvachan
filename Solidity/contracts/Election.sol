@@ -96,12 +96,12 @@ contract Election {
         ended = false;
     }
 
-    function getElectionName() public view returns (string memory) {
-        return name;
-    }
-
-    function getElectionDescription() public view returns (string memory) {
-        return description;
+    function getElectionDetails()
+        public
+        view
+        returns (string memory, string memory)
+    {
+        return (name, description);
     }
 
     function getTotalCandidates() public view returns (uint256) {
