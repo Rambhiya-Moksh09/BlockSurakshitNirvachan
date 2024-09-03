@@ -1,4 +1,4 @@
-import Voter from "../models/voter.js";
+import Voter from "../../models/voter.js";
 
 export const addVoterDetails = async (req, res) => {
     try {
