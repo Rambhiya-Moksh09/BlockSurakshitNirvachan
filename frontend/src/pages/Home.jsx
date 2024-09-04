@@ -9,6 +9,7 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 
 import ElectionAppBar from '../components/ElectionAppBar';
+import { Link } from 'react-router-dom';
 // import ElectionImage from '../public/Election.jpg';
 
 const ScrollAnimation = ({ children }) => {
@@ -26,7 +27,7 @@ const ScrollAnimation = ({ children }) => {
     });
 };
 
-const HomePage = () => {
+const Home = () => {
     return (
         <>
             <ElectionAppBar />
@@ -172,7 +173,7 @@ const HomePage = () => {
                             Block Surakshit Nirvachan is more than a voting platform—it’s a community of people who believe in the power of their voice.
                             Together, we’re building a better, more secure future for democracy.
                         </Typography>
-                        <Button variant="contained" color="primary" size="large" sx={{ bgcolor: '#948174' }}>
+                        <Button variant="contained" color="primary" size="large" component={Link} to='/register' sx={{ bgcolor: '#948174' }}>
                             Ready to change the world?
                         </Button>
                     </Box>
@@ -182,4 +183,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Home;
