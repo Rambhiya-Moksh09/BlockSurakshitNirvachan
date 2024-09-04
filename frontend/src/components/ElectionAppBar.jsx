@@ -6,9 +6,9 @@ import HowToRegIcon from '@mui/icons-material/HowToRegOutlined';
 import MoreIcon from '@mui/icons-material/MoreOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';;
 
-export const ElectionAppBar = () => {
+const ElectionAppBar = () => {
     return (
-        <AppBar sx={{ bgcolor: '#050206', py: 2 }}>
+        <AppBar sx={{ bgcolor: '#1B1B1B', py: 2 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mx: 3.5 }}>
                 <Box display="flex" alignItems="center">
                     <BallotIcon sx={{ mr: 1, fontSize: '2.5rem ' }} />
@@ -32,3 +32,5 @@ export const ElectionAppBar = () => {
         </AppBar>
     );
 };
+
+export default ElectionAppBar;

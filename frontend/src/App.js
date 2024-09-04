@@ -1,9 +1,9 @@
-import { ElectionAppBar } from "./components/ElectionAppBar";
-// import './App.css';
+
+import Home from "./pages/Home.jsx";
 function App() {
   return (
     <div className="App">
-      <ElectionAppBar />
+      <Home />
     </div>
   );
 }
