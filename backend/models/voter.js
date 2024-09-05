@@ -1,7 +1,20 @@
 import mongoose from "mongoose";
 
 const VoterSchema = new mongoose.Schema({
-    name: {
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
+    firstname: {
+        type: String,
+        required: true
+    },
+    middlename: {
+        type: String
+    },
+    lastname: {
         type: String,
         required: true
     },

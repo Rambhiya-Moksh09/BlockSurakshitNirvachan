@@ -5,10 +5,10 @@ import Voter from "../../models/voter.js";
 
 export const addVoterDetails = async (req, res) => {
     try {
-        const { name, age, voterId, state } = req.body;
+        const { email, firstname, middlename, lastname, age, voterId, state } = req.body;
         const token = crypto.randomBytes(32).toString('hex');
 
-        const voter = new Voter({ name, age, voterId, state, token });
+        const voter = new Voter({ email, firstname, middlename, lastname, age, voterId, state });
         await voter.save();
 
         res.status(201).send({ message: 'Data Saved successfully', id: voter._id });
