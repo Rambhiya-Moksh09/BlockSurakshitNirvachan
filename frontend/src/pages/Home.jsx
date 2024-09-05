@@ -52,7 +52,7 @@ const Home = () => {
                 <Typography variant="h5" paragraph sx={{ color: '#B0B0B0' }}>
                     The Future of Secure Voting
                 </Typography>
-                <Button variant="contained" size="large" sx={{ mt: 4, bgcolor: '#948174' }}>
+                <Button variant="contained" size="large" component={Link} to='/details' sx={{ mt: 4, bgcolor: '#948174' }}>
                     Learn More
                 </Button>
             </Box>
@@ -173,7 +173,7 @@ const Home = () => {
                             Block Surakshit Nirvachan is more than a voting platform—it’s a community of people who believe in the power of their voice.
                             Together, we’re building a better, more secure future for democracy.
                         </Typography>
-                        <Button variant="contained" color="primary" size="large" component={Link} to='/register' sx={{ bgcolor: '#948174' }}>
+                        <Button variant="contained" color="primary" size="large" component={Link} to='/register' sx={{ bgcolor: '#9A8174' }}>
                             Ready to change the world?
                         </Button>
                     </Box>
