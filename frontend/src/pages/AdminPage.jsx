@@ -1,8 +1,10 @@
 import React from 'react'
-
+import { Typography } from '@mui/material'
 const AdminPage = () => {
     return (
-        <h1>AdminPage</h1>
+        <>
+            <Typography variant='h1' sx={{ color: '#FFFFFF' }} >AdminPage</Typography>
+        </>
     )
 }
 

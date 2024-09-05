@@ -34,7 +34,7 @@ const ElectionAppBar = () => {
                     </Typography>
                     <AdminPanelSettingsOutlinedIcon sx={{ mr: 3, fontSize: '2rem' }} />
 
-                    <Typography variant="h5" component={Link} to="/about" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none' }}>
+                    <Typography variant="h5" component={Link} to="/details" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none' }}>
                         Know More
                     </Typography>
                     <InfoIcon sx={{ mr: 3, fontSize: '2rem' }} />

@@ -22,7 +22,7 @@ const ScrollAnimation = ({ children }) => {
         style: {
             transform: trigger ? 'translateY(0)' : 'translateY(50px)',
             opacity: trigger ? 1 : 0,
-            transition: 'transform 0.8s ease-out, opacity 0.8s ease-out',
+            transition: 'transform 1.2s ease-out, opacity 0.8s ease-out',
         },
     });
 };
