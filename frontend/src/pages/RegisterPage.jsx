@@ -12,7 +12,8 @@ const RegisterPage = () => {
         lastname: '',
         age: '',
         voterId: '',
-        state: ''
+        state: '',
+        password: ''
     })
 
     const [errors, setErrors] = useState({})
@@ -25,24 +26,27 @@ const RegisterPage = () => {
         if (!voterData.age || voterData.age <= 0) newErrors.age = 'Age must be a positive number'
         if (!voterData.voterId) newErrors.voterId = 'Voter ID is required'
         if (!voterData.state) newErrors.state = 'State is required'
+        if (!voterData.password || voterData.password.length < 8) newErrors.password = 'Password must be at least 8 characters long'
+
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (validateForm()) {
-            console.log(voterData)
             try {
-                Axios.post('http://localhost:5000/api/addVoter', voterData);
-                alert('Form Submitted Successfully')
+                const response = await Axios.post('http://localhost:5000/api/addVoter', voterData);
+                alert('Form Submitted Successfully');
                 clear();
             } catch (error) {
-                alert(error)
+                console.error(error.message)
+                alert('Error submitting the form. Please try again.');
             }
         }
     }
+
 
     const clear = () => {
         setVoterData({
@@ -52,7 +56,8 @@ const RegisterPage = () => {
             lastname: '',
             age: '',
             voterId: '',
-            state: ''
+            state: '',
+            password: ''
         })
     }
 
@@ -174,6 +179,24 @@ const RegisterPage = () => {
                         helperText={errors.email}
                         value={voterData.email}
                         onChange={(e) => setVoterData({ ...voterData, email: e.target.value })}
+                        sx={{
+                            marginBottom: 2,
+                            input: { color: '#2F2F2F' },
+                            label: { color: '#3C3C3C' },
+                            fieldset: { borderColor: '#3C3C3C' },
+                            fontFamily: 'Rajdhani, sans-serif'
+                        }}
+                    />
+                    <TextField
+                        name='password'
+                        variant='outlined'
+                        label='Password'
+                        fullWidth
+                        required
+                        error={Boolean(errors.password)}
+                        helperText={errors.password}
+                        value={voterData.password}
+                        onChange={(e) => setVoterData({ ...voterData, password: e.target.value })}
                         sx={{
                             marginBottom: 2,
                             input: { color: '#2F2F2F' },
