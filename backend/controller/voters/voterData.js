@@ -1,14 +1,28 @@
 import crypto from 'crypto'
+import argon2 from 'argon2';
 
 import Voter from "../../models/voter.js";
 
 
+const hashPassword = async (plainPassword) => {
+    try {
+        // Hash the password using Argon2
+        const hashedPassword = await argon2.hash(plainPassword);
+        return hashedPassword;
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        throw new Error('Error hashing password');
+    }
+};
+
+
 export const addVoterDetails = async (req, res) => {
     try {
-        const { email, firstname, middlename, lastname, age, voterId, state } = req.body;
+        const { email, password, firstname, middlename, lastname, age, voterId, state } = req.body;
         const token = crypto.randomBytes(32).toString('hex');
+        const hashedPassword = await hashPassword(password);
 
-        const voter = new Voter({ email, firstname, middlename, lastname, age, voterId, state, token });
+        const voter = new Voter({ email, hashedPassword, firstname, middlename, lastname, age, voterId, state, token });
         await voter.save();
 
         res.status(201).send({ message: 'Data Saved successfully', id: voter._id });
