@@ -45,7 +45,7 @@ const LoginPage = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:5000/api/login', loginData, {
+                const response = await axios.post('http://localhost:5000/users/login', loginData, {
                     withCredentials: true
                 })
                 console.log(response.data)

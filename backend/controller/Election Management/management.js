@@ -68,39 +68,3 @@ export const resetElection = async (req, res) => {
     }
 }
 
-export const getStatus = async (req, res) => {
-    try {
-
-        const tx = await ElectionContract.methods.getStatus().call()
-        const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value
-        ));
-
-        res.status(200).json(txData)
-    } catch (error) {
-        res.status(500).send({ error: error.message })
-    }
-}
-
-export const addVote = async (req, res) => {
-    try {
-        const { candidateName, account, token } = req.body;
-
-        const voter = await Voter.findOne({ token }).exec();
-        if (!voter) {
-            return res.status(404).send({ error: 'Voter record not found' });
-        }
-
-        const voterId = voter.voterId;
-
-        const tx = await ElectionContract.methods.vote(voterId, candidateName).send({ from: account })
-        const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value
-        ));
-
-        res.send({ message: 'Vote cast successfully', transaction: txData });
-
-    } catch (error) {
-        res.status(500).send({ error: 'Voting failed', error: error.message })
-    }
-}

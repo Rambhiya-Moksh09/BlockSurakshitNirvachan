@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const app = await axios.post('http://localhost:5000/api/logout', {}, { withCredentials: true })
+            const app = await axios.post('http://localhost:5000/users/logout', {}, { withCredentials: true })
             console.log(app)
             setIsLoggedIn(false);
             alert('Logout Successful')
