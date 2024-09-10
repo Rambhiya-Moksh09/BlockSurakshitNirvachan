@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import router from "./router/routes.js";
+import normalRouter from "./router/routes.js";
+import adminRouter from "./router/adminRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -18,7 +19,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("DataBase Connected"))
     .catch((error) => console.log(error.message));
 
-app.use('/api', router)
+app.use('/users', normalRouter);
+app.use('/admins', adminRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
