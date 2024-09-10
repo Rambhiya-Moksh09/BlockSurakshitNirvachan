@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Typography, Paper, Container, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
+import { AuthContext } from '../utils/AuthContext.js';
 
 const LoginPage = () => {
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',
     });
+
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({ email: '', password: '' });
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const validateForm = () => {
         let formValid = true;
@@ -49,17 +51,14 @@ const LoginPage = () => {
                 console.log(response.data)
                 clear();
                 alert('Login Successful');
-                setIsLoggedIn(true)
+                login();
+                navigate('/');
+
             } catch (error) {
                 alert('Login failed');
             }
         }
     };
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate('/')
-        }
-    }, [isLoggedIn, navigate])
 
 
     const clear = () => {
