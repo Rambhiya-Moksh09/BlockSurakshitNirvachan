@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { addNewAdmin, getAllAdmins } from '../controller/Admins/Admins.js'
-import { addVoterDetails, showVoterDetail } from '../controller/voters/voterData.js';
+import { addVoterDetails, loginUser, showVoterDetail } from '../controller/voters/voterData.js';
 import { addNewCandidate, getAllCandidates } from '../controller/candidate/candidates.js';
 import { addVote, endElection, getDetails, getStatus, getVotes, resetElection, setDetails } from '../controller/Election Management/management.js';
 
@@ -15,6 +15,7 @@ router.get('/getAdmins', getAllAdmins)
 //Voter routes
 router.post('/addVoter', addVoterDetails)
 router.get('/getVoters', showVoterDetail)
+router.post('/login', loginUser)
 
 //candidate routes
 router.post('/addCandidate', addNewCandidate)
@@ -28,4 +29,5 @@ router.post('/endElection', endElection)
 router.post('/resetElection', resetElection)
 router.get('/getStatus', getStatus)
 router.post('/vote', addVote)
+
 export default router;

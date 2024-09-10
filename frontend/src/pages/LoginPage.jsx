@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Paper, Container, TextField, Button } from '@mui/material';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
 
 const LoginPage = () => {
@@ -7,8 +10,10 @@ const LoginPage = () => {
         email: '',
         password: '',
     });
+    const navigate = useNavigate();
 
     const [errors, setErrors] = useState({ email: '', password: '' });
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const validateForm = () => {
         let formValid = true;
@@ -34,18 +39,28 @@ const LoginPage = () => {
         return formValid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                // Perform login logic here (e.g., API call)
+                const response = await axios.post('http://localhost:5000/api/login', loginData, {
+                    withCredentials: true
+                })
+                console.log(response.data)
                 clear();
-                console.log('Form submitted successfully');
+                alert('Login Successful');
+                setIsLoggedIn(true)
             } catch (error) {
-                console.error('Login failed:', error);
+                alert('Login failed');
             }
         }
     };
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/')
+        }
+    }, [isLoggedIn, navigate])
+
 
     const clear = () => {
         setLoginData({
@@ -92,7 +107,7 @@ const LoginPage = () => {
                         textShadow: '0px 0px 5px rgba(169, 169, 169, 0.7)', // Grey text glow
                     }}
                 >
-                    Voter Registration
+                    Voter Login
                 </Typography>
 
                 <form autoComplete="off" onSubmit={handleSubmit}>
