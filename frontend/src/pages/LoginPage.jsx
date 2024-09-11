@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Typography, Paper, Container, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -45,10 +45,9 @@ const LoginPage = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:5000/users/login', loginData, {
+                await axios.post('http://localhost:5000/public/login', loginData, {
                     withCredentials: true
                 })
-                console.log(response.data)
                 clear();
                 alert('Login Successful');
                 login();

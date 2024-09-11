@@ -69,9 +69,9 @@ export const loginUser = async (req, res) => {
         };
 
         // Generate JWT token with a 1-hour expiration time
-        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        const uid = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
-        res.cookie('token', token, {
+        res.cookie('jwtToken', uid, {
             httpOnly: true,
             sameSite: 'Strict'
         });
@@ -93,14 +93,14 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = (req, res) => {
     try {
-        res.clearCookie('token', {
+        res.clearCookie('jwtToken', {
             httpOnly: true,
             sameSite: 'Strict'
         });
         return res.status(200).json({ message: 'Logged Out Successfully' })
 
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ error })
     }
 }
 

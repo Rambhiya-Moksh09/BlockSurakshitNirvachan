@@ -37,7 +37,7 @@ const RegisterPage = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                const response = await Axios.post('http://localhost:5000/users/addVoter', voterData);
+                await Axios.post('http://localhost:5000/public/addVoter', voterData);
                 alert('Form Submitted Successfully');
                 clear();
             } catch (error) {
