@@ -3,9 +3,8 @@ import { configDotenv } from 'dotenv';
 
 configDotenv();
 
-const checkAuth = (req, res, next) => {
-    const token = req.cookies['uid'];
-
+const checkAuth = (req, res) => {
+    const token = req.cookies.jwtToken;
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
@@ -14,10 +13,8 @@ const checkAuth = (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: 'Failed to authenticate token' });
         }
-
-
         req.userId = decoded.id;
-        next();
+        res.status(200).json({ message: 'Authorized' })
     });
 };
 

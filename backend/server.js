@@ -7,8 +7,8 @@ import cookieParser from 'cookie-parser';
 import normalRouter from "./router/routes.js";
 import adminRouter from "./router/adminRoutes.js";
 import publicRouter from "./router/public.js";
+import checkAuth from "./utils/auth.js";
 
-import checkAuth from './middlewares/auth.js'
 
 const app = express();
 dotenv.config();
@@ -22,8 +22,9 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("DataBase Connected"))
     .catch((error) => console.log(error.message));
 
+app.get('/auth/check', checkAuth)
 app.use('/public', publicRouter)
-app.use('/users', checkAuth, normalRouter);
+app.use('/users', normalRouter);
 app.use('/admins', adminRouter)
 
 app.listen(PORT, () => {
