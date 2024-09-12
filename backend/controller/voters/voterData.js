@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
 import Voter from "../../models/voter.js";
-
+import { ElectionContract, web3 } from '../../web3.js';;
 dotenv.config();
 const hashPassword = async (plainPassword) => {
     try {
@@ -128,7 +128,6 @@ export const addVote = async (req, res) => {
 
         // Check if JWT token exists in cookies
         const cookieValue = await req.cookies.jwtToken;
-        console.log(cookieValue)
         if (!cookieValue) {
             return res.status(400).send({ error: 'Authentication token not found' });
         }
@@ -141,7 +140,7 @@ export const addVote = async (req, res) => {
         }
 
         // Send the vote transaction to the blockchain
-        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: account[0] });
+        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: accounts[0] });
 
         // Convert transaction object to a serializable format
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
@@ -150,8 +149,7 @@ export const addVote = async (req, res) => {
 
         res.send({ message: 'Vote cast successfully', transaction: txData });
     } catch (error) {
-        console.error('Error casting vote:', error);
-        res.status(500).send({ error: 'Voting failed', details: error.message });
+        res.status(500).send({ error: 'Voting failed', details: error });
     }
 };
 const decodeJwtToken = (token) => {

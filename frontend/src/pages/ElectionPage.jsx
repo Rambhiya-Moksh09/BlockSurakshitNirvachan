@@ -26,7 +26,7 @@ const ElectionPage = () => {
 
     const handleClick = async (candidateName) => {
         try {
-            await axios.post('http://localhost:5000/users/vote', { candidateName })
+            await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true })
 
         } catch (error) {
             console.log(error)
