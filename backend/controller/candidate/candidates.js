@@ -21,15 +21,14 @@ export const addNewCandidate = async (req, res) => {
 }
 
 export const getAllCandidates = async (req, res) => {
-
     try {
-        const candidate = await Candidates.find();
-        const blockdata = await ElectionContract.methods.getCandidates().call();
-
-        res.status(200).json({ candidate })
-
+        const candidates = await Candidates.find(); // Check if this returns any data
+        if (!candidates) {
+            return res.status(404).json({ message: 'No candidates found' });
+        }
+        res.status(200).json({ candidate: candidates });
     } catch (error) {
-        res.status(500).send({ message: 'Data not retrieved', error: error.message })
+        console.error('Error fetching candidates:', error);  // Log the specific error
+        res.status(500).json({ message: 'Error fetching candidates', error: error.message });
     }
-
-}
+};

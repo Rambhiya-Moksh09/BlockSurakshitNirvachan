@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid } from '@mui/material';
+import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid2 } from '@mui/material';
 
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
 import image from '../Election.jpg';
@@ -11,8 +11,6 @@ const ElectionPage = () => {
     useEffect(() => {
         axios.get('http://localhost:5000/admins/getCandidates')
             .then(response => {
-                console.log('API Response:', response.data);
-
                 if (response.data && response.data.candidate) {
                     setCandidates(response.data.candidate);
                 } else if (Array.isArray(response.data)) {
@@ -24,19 +22,28 @@ const ElectionPage = () => {
             .catch(error => {
                 console.error('Error fetching data:', error);
             })
-    }, [candidates]);
+    }, []);
+
+    const handleClick = async (candidateName) => {
+        try {
+            await axios.post('http://localhost:5000/users/vote', { candidateName })
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Container sx={{ my: 15, mx: 'auto', px: 1 }}>
             <ElectionAppBar />
-            <Grid container spacing={4} justifyContent={'space-evenly'}>
+            <Grid2 container spacing={3} justifyContent={'space-evenly'}>
                 {candidates.length > 0 ? (
                     candidates.map((candidate) => (
-                        <Grid item key={candidate._id} xs={12} sm={6} md={4}>
+                        <Grid2 item key={candidate._id} xs={12} sm={6} md={4}>
                             <Card sx={{
                                 bgcolor: "#1F1F1F",
                                 height: 425,
-                                width: '100%',  // Adjust to full width within the grid item
+                                width: 325,  // Adjust to full width within the grid item
                                 color: '#B4B4B4',
                                 borderRadius: 3,
                                 boxShadow: '0px 0px 15px rgba(169, 169, 169, 0.5), 0px 0px 30px rgba(169, 169, 169, 0.3)'
@@ -75,19 +82,19 @@ const ElectionPage = () => {
                                         '&:hover': {
                                             backgroundColor: '#876A60',
                                         },
-                                    }}>
+                                    }} onClick={() => handleClick(candidate.name)}>
                                         Vote
                                     </Button>
                                 </CardActions>
                             </Card>
-                        </Grid>
+                        </Grid2>
                     ))
                 ) : (
                     <Typography variant="h6" color="error">
                         No candidates found.
                     </Typography>
                 )}
-            </Grid>
+            </Grid2>
         </Container>
     );
 }

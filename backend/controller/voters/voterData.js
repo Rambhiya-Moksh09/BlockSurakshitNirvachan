@@ -121,23 +121,43 @@ export const getStatus = async (req, res) => {
 
 export const addVote = async (req, res) => {
     try {
-        const { candidateName, account, token } = req.body;
+        const { candidateName } = req.body;
+        if (!candidateName) {
+            return res.status(400).send({ error: 'Candidate name is required' });
+        }
 
-        const voter = await Voter.findOne({ token }).exec();
-        if (!voter) {
+        // Check if JWT token exists in cookies
+        const cookieValue = await req.cookies.jwtToken;
+        console.log(cookieValue)
+        if (!cookieValue) {
+            return res.status(400).send({ error: 'Authentication token not found' });
+        }
+
+        const decodedToken = decodeJwtToken(cookieValue)
+        const vId = decodedToken.voterid;
+
+        if (!vId) {
             return res.status(404).send({ error: 'Voter record not found' });
         }
 
-        const voterId = voter.voterId;
+        // Send the vote transaction to the blockchain
+        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: account[0] });
 
-        const tx = await ElectionContract.methods.vote(voterId, candidateName).send({ from: account })
+        // Convert transaction object to a serializable format
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
             typeof value === 'bigint' ? value.toString() : value
         ));
 
         res.send({ message: 'Vote cast successfully', transaction: txData });
-
     } catch (error) {
-        res.status(500).send({ error: 'Voting failed', error: error.message })
+        console.error('Error casting vote:', error);
+        res.status(500).send({ error: 'Voting failed', details: error.message });
     }
-}
+};
+const decodeJwtToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET_KEY);
+    } catch (err) {
+        throw new Error('Invalid or expired token');
+    }
+};
