@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid2 } from '@mui/material';
-
+import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid2, Box } from '@mui/material';
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
 import image from '../Election.jpg';
 
 const ElectionPage = () => {
     const [candidates, setCandidates] = useState([]);
+    const [electionDetails, setElectionDetails] = useState({ name: '', description: '' });
 
     useEffect(() => {
+        // Fetch candidates
         axios.get('http://localhost:5000/admins/getCandidates')
             .then(response => {
                 if (response.data && response.data.candidate) {
@@ -16,26 +17,64 @@ const ElectionPage = () => {
                 } else if (Array.isArray(response.data)) {
                     setCandidates(response.data);
                 } else {
-                    console.error('Unexpected API response format');
+                    console.error('Unexpected API response format for candidates');
                 }
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching candidates:', error);
+            });
+
+        // Fetch election details
+        axios.get('http://localhost:5000/admins/getElectionDetails')
+            .then(response => {
+                // console.log('Election Details Response:', response.data); // Debug log
+
+                // Check if response data is an object with `name` and `description`
+                if (response.data && response.data.name && response.data.description) {
+                    setElectionDetails({
+                        name: response.data.name,
+                        description: response.data.description
+                    });
+                } else {
+                    console.error('Unexpected API response format for election details:', response.data);
+                }
             })
+            .catch(error => {
+                console.error('Error fetching election details:', error);
+            });
     }, []);
 
     const handleClick = async (candidateName) => {
         try {
-            await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true })
-
+            await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true });
+            console.log('Vote cast successfully');
         } catch (error) {
-            console.log(error.response.data)
+            console.error('Error casting vote:', error.response.data);
         }
-    }
+    };
 
     return (
-        <Container sx={{ my: 15, mx: 'auto', px: 1 }}>
+        <Container sx={{ my: 10, mx: 'auto', px: 1 }}>
             <ElectionAppBar />
+            {/* Centering election details */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    mb: 2
+                }}
+            >
+                <Typography variant="h1" sx={{ mb: 2, fontFamily: 'Rajdhani, sans-serif', color: '#FFFFFF' }}>
+                    {electionDetails.name || "Loading election details..."}
+                </Typography>
+                <Typography variant="h4" sx={{ fontFamily: 'Rajdhani, sans-serif', color: '#FFFFFF' }}>
+                    {electionDetails.description || "Loading election description..."}
+                </Typography>
+            </Box>
+
             <Grid2 container spacing={3} justifyContent={'space-evenly'}>
                 {candidates.length > 0 ? (
                     candidates.map((candidate) => (
@@ -48,7 +87,6 @@ const ElectionPage = () => {
                                 borderRadius: 3,
                                 boxShadow: '0px 0px 15px rgba(169, 169, 169, 0.5), 0px 0px 30px rgba(169, 169, 169, 0.3)'
                             }}>
-
                                 <CardMedia
                                     component="img"
                                     height="175"

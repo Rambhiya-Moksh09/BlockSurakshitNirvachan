@@ -21,11 +21,15 @@ export const getDetails = async (req, res) => {
     try {
         const data = await ElectionContract.methods.getElectionDetails().call();
 
-        res.status(200).json(data)
+        const name = data['0'];
+        const description = data['1'];
+
+        res.status(200).json({ name, description });
     } catch (error) {
-        res.status(500).send({ message: 'Data not retrieved', error })
+        res.status(500).send({ message: 'Data not retrieved', error });
     }
 }
+
 
 export const getVotes = async (req, res) => {
     try {
