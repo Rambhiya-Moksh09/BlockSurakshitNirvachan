@@ -22,7 +22,9 @@ export const addNewCandidate = async (req, res) => {
 
 export const getAllCandidates = async (req, res) => {
     try {
-        const candidates = await Candidates.find(); // Check if this returns any data
+        const candidates = await Candidates.find();
+        const contractCandidates = await ElectionContract.methods.getCandidates().call();// Check if this returns any data
+        //console.log(contractCandidates)
         if (!candidates) {
             return res.status(404).json({ message: 'No candidates found' });
         }

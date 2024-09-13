@@ -32,13 +32,14 @@ contract Election {
         return adminList;
     }
 
-    // *********************************************** CANDIDATE MANAGEMENT ***********************************************************\\\
+    // *********************************************** CANDIDATE MANAGEMENT ***********************************************************
     struct Candidate {
         string name;
         string info;
         bool exists;
     }
-    mapping(uint => Candidate) public candidates;
+
+    mapping(string => Candidate) public candidates; // Map candidates by name
     string[] public candidateNames;
     string[] public Info;
     uint public candidateCount;
@@ -47,7 +48,8 @@ contract Election {
         string memory _candidateName,
         string memory _info
     ) public onlyAdmin {
-        candidates[candidateCount] = Candidate({
+        require(!candidates[_candidateName].exists, "Candidate already exists"); // Ensure the candidate doesn't already exist
+        candidates[_candidateName] = Candidate({
             name: _candidateName,
             info: _info,
             exists: true
@@ -67,10 +69,11 @@ contract Election {
 
     function deleteCandidate(uint256 index) public onlyAdmin {
         require(index < candidateCount, "Invalid Candidate Index");
-        require(candidates[index].exists, "Candidate does not exist");
+        string memory candidateName = candidateNames[index];
+        require(candidates[candidateName].exists, "Candidate does not exist");
 
         // Mark the candidate as deleted in the mapping
-        candidates[index].exists = false;
+        candidates[candidateName].exists = false;
 
         // Remove the candidate's name and info from the arrays
         if (index < candidateNames.length - 1) {
@@ -85,7 +88,7 @@ contract Election {
         candidateCount--;
     }
 
-    //****************************************** ELECTION MANAGEMENT  *************************************************\\
+    //****************************************** ELECTION MANAGEMENT *************************************************
     function setElectionDetails(
         string memory _name,
         string memory _description
@@ -108,7 +111,7 @@ contract Election {
         return candidateNames.length;
     }
 
-    // **************************************************** VOTER & VOTING MANAGEMENT **************************************************\\
+    // **************************************************** VOTER & VOTING MANAGEMENT **************************************************
     struct Vote {
         string voterId;
         string candidate;
@@ -118,7 +121,7 @@ contract Election {
 
     function vote(string memory _voterId, string memory _candidateName) public {
         require(started && !ended, "Election not active");
-        require(candidates[candidateCount].exists, "No such candidate");
+        require(candidates[_candidateName].exists, "No such candidate"); // Directly check candidate existence
 
         bytes32 hashedVoterId = keccak256(abi.encodePacked(_voterId));
         require(!hasVoted[hashedVoterId], "Already Voted");
@@ -139,9 +142,9 @@ contract Election {
     function resetElection() public onlyAdmin {
         require(started == true && ended == true, "Election not ended");
 
-        // Reset mapping by setting candidates as non-existent
-        for (uint i = 0; i < candidateCount; i++) {
-            candidates[i].exists = false;
+        // Reset the mapping by setting candidates as non-existent
+        for (uint i = 0; i < candidateNames.length; i++) {
+            candidates[candidateNames[i]].exists = false;
         }
 
         // Reset arrays

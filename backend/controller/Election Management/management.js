@@ -12,7 +12,7 @@ export const setDetails = async (req, res) => {
         ));
         res.status(200).json(txData)
     } catch (error) {
-        res.status(500).send({ message: 'Data not saved', error: error.message })
+        res.status(500).send({ message: 'Data not saved', error })
     }
 
 }
@@ -29,7 +29,7 @@ export const getDetails = async (req, res) => {
 
 export const getVotes = async (req, res) => {
     try {
-        const tx = await ElectionContract.methods.getVotes().call();
+        const tx = await ElectionContract.methods.getVotes().call({ from: "0x1395d3EEbAFD719Bc6a31380264F2365df69E337" });
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
             typeof value === 'bigint' ? value.toString() : value
         ));

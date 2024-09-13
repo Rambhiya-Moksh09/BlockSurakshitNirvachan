@@ -29,7 +29,7 @@ const ElectionPage = () => {
             await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true })
 
         } catch (error) {
-            console.log(error)
+            console.log(error.response.data)
         }
     }
 

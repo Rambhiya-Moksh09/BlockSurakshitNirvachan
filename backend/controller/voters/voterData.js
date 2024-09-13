@@ -125,7 +125,7 @@ export const addVote = async (req, res) => {
         if (!candidateName) {
             return res.status(400).send({ error: 'Candidate name is required' });
         }
-
+        console.log(candidateName)
         // Check if JWT token exists in cookies
         const cookieValue = await req.cookies.jwtToken;
         if (!cookieValue) {
@@ -140,7 +140,7 @@ export const addVote = async (req, res) => {
         }
 
         // Send the vote transaction to the blockchain
-        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: accounts[0] });
+        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: '0x1e3cD36B03d6536d744785c89d0999E88A5697C9', gas: 5000000 });
 
         // Convert transaction object to a serializable format
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
