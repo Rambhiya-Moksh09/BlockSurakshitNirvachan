@@ -113,7 +113,7 @@ contract Election {
 
     // **************************************************** VOTER & VOTING MANAGEMENT **************************************************
     struct Vote {
-        string voterId;
+        bytes32 voterId; // Store the hashed voterId
         string candidate;
     }
     Vote[] public votes;
@@ -126,12 +126,12 @@ contract Election {
         bytes32 hashedVoterId = keccak256(abi.encodePacked(_voterId));
         require(!hasVoted[hashedVoterId], "Already Voted");
 
-        votes.push(Vote({voterId: _voterId, candidate: _candidateName}));
+        votes.push(Vote({voterId: hashedVoterId, candidate: _candidateName}));
         hasVoted[hashedVoterId] = true;
     }
 
     function getVotes() public view onlyAdmin returns (Vote[] memory) {
-        return votes;
+        return votes; // Returning the votes with hashed voterId
     }
 
     function endElection() public onlyAdmin {
