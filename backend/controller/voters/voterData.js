@@ -63,7 +63,8 @@ export const loginUser = async (req, res) => {
         const payload = {
             id: user._id,
             email: user.email,
-            voterid: user.voterId
+            voterid: user.voterId,
+            role: 'NORMAL'
         };
 
         // Generate JWT token with a 1-hour expiration time

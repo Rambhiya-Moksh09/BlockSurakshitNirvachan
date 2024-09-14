@@ -1,9 +1,10 @@
 import React from 'react'
 import { Typography } from '@mui/material'
+import AdminLogin from '../components/AdminLogin.jsx'
 const AdminPage = () => {
     return (
         <>
-            <Typography variant='h1' sx={{ color: '#FFFFFF' }} >AdminPage</Typography>
+            <AdminLogin />
         </>
     )
 }

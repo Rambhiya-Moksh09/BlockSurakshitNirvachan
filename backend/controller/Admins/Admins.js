@@ -73,13 +73,13 @@ export const loginAdmin = async (req, res) => {
         const payload = {
             id: user._id,
             email: user.email,
-            voterid: user.voterId
+            voterid: user.voterId,
+            role: 'ADMIN'
         };
 
         // Generate JWT token with a 1-hour expiration time
         const uid = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-        console.log(uid)
-        res.cookie('jwtToken', uid, {
+        res.cookie('adminToken', uid, {
             httpOnly: true,
             sameSite: 'Strict'
         });
@@ -101,7 +101,7 @@ export const loginAdmin = async (req, res) => {
 
 export const logoutAdmin = (req, res) => {
     try {
-        res.clearCookie('jwtToken', {
+        res.clearCookie('adminToken', {
             httpOnly: true,
             sameSite: 'Strict'
         });
