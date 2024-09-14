@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import argon2 from 'argon2';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
@@ -21,7 +20,6 @@ const hashPassword = async (plainPassword) => {
 export const addVoterDetails = async (req, res) => {
     try {
         const { email, password, firstname, middlename, lastname, age, voterId, state } = req.body;
-        const token = crypto.randomBytes(32).toString('hex');
         const hashedPassword = await hashPassword(password);
 
         const voter = new Voter({ email, hashedPassword, firstname, middlename, lastname, age, voterId, state, token });
