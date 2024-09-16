@@ -54,7 +54,7 @@ const ElectionAppBar = () => {
                         </>
                     )}
 
-                    <Typography variant="h5" component={Link} to="/admincontrol" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
+                    <Typography variant="h5" component={Link} to="/adminlogin" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
                         Admin
                     </Typography>
                     <AdminPanelSettingsOutlinedIcon sx={{ mr: 3, fontSize: '2rem' }} />

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Paper, Container, TextField, Button } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
 // Import the AdminAuthContext instead of AuthContext
@@ -12,10 +12,9 @@ const AdminLogin = () => {
         email: '',
         password: '',
     });
-
+    const navigate = useNavigate();
     // Destructure the adminLogin function from AdminAuthContext
     const { adminLogin } = useContext(AdminAuthContext);
-    const navigate = useNavigate();
 
     const [errors, setErrors] = useState({ email: '', password: '' });
 
@@ -47,7 +46,7 @@ const AdminLogin = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                // Send login request to adminLogin endpoint
+
                 await axios.post('http://localhost:5000/admins/adminLogin', loginData, {
                     withCredentials: true,
                 });
@@ -55,12 +54,8 @@ const AdminLogin = () => {
                 clear();
                 alert('Admin Login Successful');
 
-                // Call the adminLogin function to update the admin login state
                 adminLogin();
-
-                // Navigate to the admin dashboard or another protected route for admins
-                // navigate('/admin/dashboard');
-
+                navigate('/adminControl')
             } catch (error) {
                 alert('Admin login failed');
             }
