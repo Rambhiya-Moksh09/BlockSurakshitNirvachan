@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import ElectionPage from './pages/ElectionPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-import AdminPage from './pages/AdminPage.jsx';
+import CandidatePage from './pages/CandidatePage.jsx';
 import DetailsPage from './pages/DetailsPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
@@ -25,7 +25,7 @@ function App() {
             <Route path="/adminlogin" element={<AdminLogin />} /> {/* Admin route */}
             <Route path="/details" element={<DetailsPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path='/admincontrols' element={<AdminPage />} />
+            <Route path='/admincontrols' element={<CandidatePage />} />
             {/* <Route path="/" element={}/> */}
             {/* Add other routes here */}
           </Routes>

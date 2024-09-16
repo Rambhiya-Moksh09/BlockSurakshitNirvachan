@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Paper, Container, TextField, Button } from '@mui/material';
 import axios from 'axios';
 
-import ElectionAppBar from '../components/ElectionAppBar.jsx';
-// Import the AdminAuthContext instead of AuthContext
 import { AdminAuthContext } from '../utils/AdminAuthContext.js';
 
+import AdminAppBar from './AdminAppBar.jsx';
 const AdminLogin = () => {
     const [loginData, setLoginData] = useState({
         email: '',
@@ -55,7 +54,7 @@ const AdminLogin = () => {
                 alert('Admin Login Successful');
 
                 adminLogin();
-                navigate('/adminControl')
+                navigate('/admincontrols')
             } catch (error) {
                 alert('Admin login failed');
             }
@@ -75,7 +74,7 @@ const AdminLogin = () => {
 
     return (
         <Container maxWidth="sm">
-            <ElectionAppBar />
+            <AdminAppBar />
             <Typography
                 variant="h3"
                 align="center"

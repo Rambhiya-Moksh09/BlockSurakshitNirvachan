@@ -8,12 +8,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../utils/AuthContext.js';  // For normal users
-import { AdminAuthContext } from '../utils/AdminAuthContext.js';  // For admin login
+import { AdminAuthContext } from '../utils/AdminAuthContext.js';
 
-const ElectionAppBar = () => {
-    const { isLoggedIn, logout } = useContext(AuthContext); // User login/logout functionality
-    const { isAdminLoggedIn, adminLogout } = useContext(AdminAuthContext); // Admin login/logout functionality
+const AdminAppBar = () => {
+    const { isAdminLoggedIn, adminLogout } = useContext(AdminAuthContext);
 
     return (
         <AppBar sx={{ bgcolor: '#1B1B1B', py: 2 }}>
@@ -26,18 +24,26 @@ const ElectionAppBar = () => {
                 </Box>
 
                 <Box display="flex" alignItems="center" justifyContent="flex-end">
-                    {/* User specific functionality */}
+                    <Typography variant="h5" component={Link} to="/adminlogin" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
+                        Set Elections
+                    </Typography>
+                    <AdminPanelSettingsOutlinedIcon sx={{ mr: 3, fontSize: '2rem' }} />
+
+                    <Typography variant="h5" component={Link} to="/details" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
+                        Add Candidates
+                    </Typography>
+                    <InfoIcon sx={{ mr: 3, fontSize: '2rem' }} />
+
                     <Typography variant="h5" component={Link} to="/election" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
                         Election
                     </Typography>
                     <HowToRegIcon sx={{ mr: 3, fontSize: '2rem' }} />
 
-                    {/* Check if user is logged in */}
-                    {isLoggedIn ? (
+                    {isAdminLoggedIn ? (
                         <>
                             <Typography
                                 variant="h5"
-                                onClick={logout}
+                                onClick={adminLogout}
                                 sx={{ mr: 1, color: '#FFFFFF', cursor: 'pointer', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}
                             >
                                 Logout
@@ -49,34 +55,18 @@ const ElectionAppBar = () => {
                             <Typography
                                 variant="h5"
                                 component={Link}
-                                to="/login"
+                                to="/adminlogin"
                                 sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}
                             >
-                                Login
+                                Admin Login
                             </Typography>
-                            <LoginIcon sx={{ mr: 3, fontSize: '2rem', fontFamily: 'Rajdhani, sans-serif' }} />
+                            <LoginIcon sx={{ mr: 3, fontSize: '2rem' }} />
                         </>
                     )}
-
-                    {/* Admin specific functionality */}
-                    <Typography
-                        variant="h5"
-                        component={Link}
-                        to={isAdminLoggedIn ? "/admincontrols" : "/adminlogin"}  // Navigate based on admin login status
-                        sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}
-                    >
-                        Admin
-                    </Typography>
-                    <AdminPanelSettingsOutlinedIcon sx={{ mr: 3, fontSize: '2rem' }} />
-
-                    <Typography variant="h5" component={Link} to="/details" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
-                        Know More
-                    </Typography>
-                    <InfoIcon sx={{ mr: 3, fontSize: '2rem' }} />
                 </Box>
             </Box>
         </AppBar>
     );
 };
 
-export default ElectionAppBar;
+export default AdminAppBar;
