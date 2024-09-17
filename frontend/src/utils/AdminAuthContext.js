@@ -38,10 +38,11 @@ export const AdminAuthProvider = ({ children }) => {
 
     const adminLogout = async () => {
         try {
-            await axios.post('http://localhost:5000/admins/logout', {}, { withCredentials: true });
+            await axios.post('http://localhost:5000/admins/adminLogout', {}, { withCredentials: true });
             setIsAdminLoggedIn(false);
             localStorage.setItem('isAdminLoggedIn', 'false');
             alert('Admin Logout Successful');
+
         } catch (error) {
             console.log('Admin Logout failed:', error.message);
         }

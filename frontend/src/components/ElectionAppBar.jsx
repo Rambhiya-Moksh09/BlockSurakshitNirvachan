@@ -13,7 +13,7 @@ import { AdminAuthContext } from '../utils/AdminAuthContext.js';  // For admin l
 
 const ElectionAppBar = () => {
     const { isLoggedIn, logout } = useContext(AuthContext); // User login/logout functionality
-    const { isAdminLoggedIn, adminLogout } = useContext(AdminAuthContext); // Admin login/logout functionality
+    const { isAdminLoggedIn } = useContext(AdminAuthContext); // Admin login/logout functionality
 
     return (
         <AppBar sx={{ bgcolor: '#1B1B1B', py: 2 }}>
