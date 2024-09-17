@@ -1,6 +1,6 @@
 import Voter from '../../models/voter.js';
 import { ElectionContract, web3 } from '../../web3.js'
-
+import Candidates from '../../models/candidate.js';
 export const setDetails = async (req, res) => {
     try {
         const { name, description } = req.body;
@@ -62,10 +62,11 @@ export const resetElection = async (req, res) => {
     try {
         const accounts = await web3.eth.getAccounts();
         const tx = await ElectionContract.methods.resetElection().send({ from: accounts[0], gas: 5000000 });
+
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
             typeof value === 'bigint' ? value.toString() : value
         ));
-
+        await Candidates.deleteMany()
         res.status(200).json(txData)
     } catch (error) {
         res.status(500).send({ error })
