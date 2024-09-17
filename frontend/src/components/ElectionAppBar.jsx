@@ -62,7 +62,7 @@ const ElectionAppBar = () => {
                     <Typography
                         variant="h5"
                         component={Link}
-                        to={isAdminLoggedIn ? "/admincontrols" : "/adminlogin"}  // Navigate based on admin login status
+                        to={isAdminLoggedIn ? "/setElections" : "/adminlogin"}  // Navigate based on admin login status
                         sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}
                     >
                         Admin

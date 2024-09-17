@@ -24,12 +24,12 @@ const AdminAppBar = () => {
                 </Box>
 
                 <Box display="flex" alignItems="center" justifyContent="flex-end">
-                    <Typography variant="h5" component={Link} to="/adminlogin" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
+                    <Typography variant="h5" component={Link} to="/setElections" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
                         Set Elections
                     </Typography>
                     <AdminPanelSettingsOutlinedIcon sx={{ mr: 3, fontSize: '2rem' }} />
 
-                    <Typography variant="h5" component={Link} to="/details" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
+                    <Typography variant="h5" component={Link} to="/admincontrols" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
                         Add Candidates
                     </Typography>
                     <InfoIcon sx={{ mr: 3, fontSize: '2rem' }} />

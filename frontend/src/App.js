@@ -8,6 +8,7 @@ import CandidatePage from './pages/CandidatePage.jsx';
 import DetailsPage from './pages/DetailsPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
+import SetElectionPage from './pages/SetElectionPage.jsx';
 
 // Import both AuthProvider and AdminAuthProvider
 import { AuthProvider } from './utils/AuthContext.js';
@@ -26,6 +27,7 @@ function App() {
             <Route path="/details" element={<DetailsPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path='/admincontrols' element={<CandidatePage />} />
+            <Route path='/setElections' element={<SetElectionPage />} />
             {/* <Route path="/" element={}/> */}
             {/* Add other routes here */}
           </Routes>

@@ -22,7 +22,7 @@ export const addVoterDetails = async (req, res) => {
         const { email, password, firstname, middlename, lastname, age, voterId, state } = req.body;
         const hashedPassword = await hashPassword(password);
 
-        const voter = new Voter({ email, hashedPassword, firstname, middlename, lastname, age, voterId, state, token });
+        const voter = new Voter({ email, hashedPassword, firstname, middlename, lastname, age, voterId, state });
         await voter.save();
 
         res.status(201).send({ message: 'Data Saved successfully', id: voter._id });

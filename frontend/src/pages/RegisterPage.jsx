@@ -41,7 +41,7 @@ const RegisterPage = () => {
                 alert('Form Submitted Successfully');
                 clear();
             } catch (error) {
-                console.error(error.message)
+                console.error(error)
                 alert('Error submitting the form. Please try again.');
             }
         }
