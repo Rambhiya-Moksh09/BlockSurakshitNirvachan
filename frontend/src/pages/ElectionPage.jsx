@@ -48,8 +48,12 @@ const ElectionPage = () => {
         try {
             await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true });
             console.log('Vote cast successfully');
+            alert('Vote Cast Successful')
         } catch (error) {
-            console.error('Error casting vote:', error.response.data);
+            console.error('Error casting vote:', error);
+            if (error.response.status === 500) {
+                alert('You have already VOTED!')
+            }
         }
     };
 
