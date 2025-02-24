@@ -54,7 +54,7 @@ const AdminLogin = () => {
                 alert('Admin Login Successful');
 
                 adminLogin();
-                navigate('/admincontrols')
+                navigate('/setElections')
             } catch (error) {
                 alert('Admin login failed');
             }
