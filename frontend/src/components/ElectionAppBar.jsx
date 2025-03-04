@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppBar, Box, Typography } from '@mui/material';
+import { AppBar, Box, Typography, Button, MenuItem, Select } from '@mui/material';
 import BallotIcon from '@mui/icons-material/Ballot';
 import LoginIcon from '@mui/icons-material/LoginOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
@@ -12,8 +12,8 @@ import { AuthContext } from '../utils/AuthContext.js';  // For normal users
 import { AdminAuthContext } from '../utils/AdminAuthContext.js';  // For admin login
 
 const ElectionAppBar = () => {
-    const { isLoggedIn, logout } = useContext(AuthContext); // User login/logout functionality
-    const { isAdminLoggedIn } = useContext(AdminAuthContext); // Admin login/logout functionality
+    const { isLoggedIn, logout, metamaskAccount, connectMetaMask, availableAccounts, setMetamaskAccount } = useContext(AuthContext);
+    const { isAdminLoggedIn } = useContext(AdminAuthContext);
 
     return (
         <AppBar sx={{ bgcolor: '#1B1B1B', py: 2 }}>
@@ -26,7 +26,6 @@ const ElectionAppBar = () => {
                 </Box>
 
                 <Box display="flex" alignItems="center" justifyContent="flex-end">
-                    {/* User specific functionality */}
                     <Typography variant="h5" component={Link} to="/election" sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}>
                         Election
                     </Typography>
@@ -35,6 +34,30 @@ const ElectionAppBar = () => {
                     {/* Check if user is logged in */}
                     {isLoggedIn ? (
                         <>
+                            {/* MetaMask Account Selection */}
+                            {metamaskAccount ? (
+                                <Select
+                                    value={metamaskAccount}
+                                    onChange={(e) => {
+                                        setMetamaskAccount(e.target.value);
+                                        localStorage.setItem("metamaskAccount", e.target.value);
+                                    }}
+                                    displayEmpty
+                                    sx={{ mr: 3, color: "#FFFFFF", backgroundColor: "#333", borderRadius: "5px", padding: "5px" }}
+                                >
+                                    {availableAccounts.map((account) => (
+                                        <MenuItem key={account} value={account}>
+                                            {account.slice(0, 6)}...{account.slice(-4)}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            ) : (
+                                <Button variant="contained" color="warning" onClick={connectMetaMask} sx={{ mr: 3 }}>
+                                    Connect MetaMask
+                                </Button>
+                            )}
+
+                            {/* Logout Button */}
                             <Typography
                                 variant="h5"
                                 onClick={logout}
@@ -62,7 +85,7 @@ const ElectionAppBar = () => {
                     <Typography
                         variant="h5"
                         component={Link}
-                        to={isAdminLoggedIn ? "/setElections" : "/adminlogin"}  // Navigate based on admin login status
+                        to={isAdminLoggedIn ? "/setElections" : "/adminlogin"}
                         sx={{ mr: 1, color: '#FFFFFF', textDecoration: 'none', fontFamily: 'Rajdhani, sans-serif' }}
                     >
                         Admin
