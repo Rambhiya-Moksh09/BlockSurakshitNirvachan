@@ -139,7 +139,7 @@ export const addVote = async (req, res) => {
         }
 
         // Send the vote transaction to the blockchain
-        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: '0x1e3cD36B03d6536d744785c89d0999E88A5697C9', gas: 5000000 });
+        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: '0xF72541Cb64C37B09A278B3e4103456060CE6Bca9', gas: 5000000 });
 
         // Convert transaction object to a serializable format
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
@@ -148,7 +148,7 @@ export const addVote = async (req, res) => {
 
         res.send({ message: 'Vote cast successfully', transaction: txData });
     } catch (error) {
-        res.status(500).send({ error: 'Voting failed', details: error });
+        res.status(500).send({ error: 'Voting failed', error });
     }
 };
 const decodeJwtToken = (token) => {

@@ -23,7 +23,6 @@ export const getDetails = async (req, res) => {
 
         const name = data['0'];
         const description = data['1'];
-
         res.status(200).json({ name, description });
     } catch (error) {
         res.status(500).send({ message: 'Data not retrieved', error });
@@ -33,7 +32,8 @@ export const getDetails = async (req, res) => {
 
 export const getVotes = async (req, res) => {
     try {
-        const tx = await ElectionContract.methods.getVotes().call({ from: "0x1395d3EEbAFD719Bc6a31380264F2365df69E337" });
+        const accounts = await web3.eth.getAccounts();
+        const tx = await ElectionContract.methods.getVotes().call({ from: accounts[0] });
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>
             typeof value === 'bigint' ? value.toString() : value
         ));
