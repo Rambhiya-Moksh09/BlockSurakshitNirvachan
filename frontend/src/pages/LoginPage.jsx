@@ -84,7 +84,7 @@ const LoginPage = () => {
                     mt: 13,
                 }}
             >
-                Welcome to Registration
+                Welcome to Login
             </Typography>
             <Paper
                 sx={{

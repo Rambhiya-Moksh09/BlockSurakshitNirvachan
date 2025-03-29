@@ -120,7 +120,7 @@ export const getStatus = async (req, res) => {
 
 export const addVote = async (req, res) => {
     try {
-        const { candidateName } = req.body;
+        const { candidateName, account } = req.body;
         if (!candidateName) {
             return res.status(400).send({ error: 'Candidate name is required' });
         }
@@ -137,9 +137,9 @@ export const addVote = async (req, res) => {
         if (!vId) {
             return res.status(404).send({ error: 'Voter record not found' });
         }
-
+        console.log(account)
         // Send the vote transaction to the blockchain
-        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: '0xF72541Cb64C37B09A278B3e4103456060CE6Bca9', gas: 5000000 });
+        const tx = await ElectionContract.methods.vote(vId, candidateName).send({ from: account, gas: 5000000 });
 
         // Convert transaction object to a serializable format
         const txData = JSON.parse(JSON.stringify(tx, (key, value) =>

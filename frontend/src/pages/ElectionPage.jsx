@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid2, Box } from '@mui/material';
+import { Card, CardContent, CardMedia, Container, Typography, CardActions, Button, Grid, Box } from '@mui/material';
 import ElectionAppBar from '../components/ElectionAppBar.jsx';
+import { AuthContext } from '../utils/AuthContext.js'; // ✅ Import AuthContext
 import image from '../Election.jpg';
 
 const ElectionPage = () => {
+    const { metamaskAccount } = useContext(AuthContext); // ✅ Get MetaMask account number
     const [candidates, setCandidates] = useState([]);
     const [electionDetails, setElectionDetails] = useState({ name: '', description: '' });
 
     useEffect(() => {
-        // Fetch candidates
         axios.get('http://localhost:5000/admins/getCandidates')
             .then(response => {
                 if (response.data && response.data.candidate) {
@@ -24,12 +25,8 @@ const ElectionPage = () => {
                 console.error('Error fetching candidates:', error);
             });
 
-        // Fetch election details
         axios.get('http://localhost:5000/admins/getElectionDetails')
             .then(response => {
-                // console.log('Election Details Response:', response.data); // Debug log
-
-                // Check if response data is an object with `name` and `description`
                 if (response.data && response.data.name && response.data.description) {
                     setElectionDetails({
                         name: response.data.name,
@@ -44,15 +41,24 @@ const ElectionPage = () => {
             });
     }, []);
 
+    // ✅ Keep the original handleClick but add the account number
     const handleClick = async (candidateName) => {
         try {
-            await axios.post('http://localhost:5000/users/vote', { candidateName }, { withCredentials: true });
+            await axios.post('http://localhost:5000/users/vote', {
+                candidateName,
+                account: metamaskAccount  // ✅ Send MetaMask account number
+            }, { withCredentials: true });
+
             console.log('Vote cast successfully');
-            alert('Vote Cast Successful')
+            console.log(metamaskAccount)
+            alert('Vote Cast Successful');
         } catch (error) {
             console.error('Error casting vote:', error);
-            if (error.response.status === 500) {
-                alert('You have already VOTED!')
+            console.log(metamaskAccount)
+            if (error.response && error.response.status === 500) {
+                alert('You have already VOTED!');
+            } else {
+                alert('Error casting vote. Please try again.');
             }
         }
     };
@@ -60,17 +66,7 @@ const ElectionPage = () => {
     return (
         <Container sx={{ my: 10, mx: 'auto', px: 1 }}>
             <ElectionAppBar />
-            {/* Centering election details */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    mb: 2
-                }}
-            >
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', mb: 2 }}>
                 <Typography variant="h1" sx={{ mb: 2, fontFamily: 'Rajdhani, sans-serif', color: '#FFFFFF' }}>
                     {electionDetails.name || "Loading election details..."}
                 </Typography>
@@ -79,14 +75,14 @@ const ElectionPage = () => {
                 </Typography>
             </Box>
 
-            <Grid2 container spacing={3} justifyContent={'space-evenly'}>
+            <Grid container spacing={3} justifyContent={'space-evenly'}>
                 {candidates.length > 0 ? (
                     candidates.map((candidate) => (
-                        <Grid2 item key={candidate._id} xs={12} sm={6} md={4}>
+                        <Grid item key={candidate._id} xs={12} sm={6} md={4}>
                             <Card sx={{
                                 bgcolor: "#1F1F1F",
                                 height: 425,
-                                width: 325,  // Adjust to full width within the grid item
+                                width: 325,
                                 color: '#B4B4B4',
                                 borderRadius: 3,
                                 boxShadow: '0px 0px 15px rgba(169, 169, 169, 0.5), 0px 0px 30px rgba(169, 169, 169, 0.3)'
@@ -102,15 +98,12 @@ const ElectionPage = () => {
                                     <Typography variant="h4" sx={{ fontFamily: 'Rajdhani, sans-serif', color: '#FFFFFF' }}>
                                         {candidate.name}
                                     </Typography>
-
                                     <Typography variant="body1" sx={{ fontFamily: 'Rajdhani, sans-serif', color: '#B4B4B4', mt: 1 }}>
                                         Info: {candidate.info}
                                     </Typography>
-
                                     <Typography variant="body1" sx={{ fontFamily: 'Rajdhani, sans-serif', color: '#B4B4B4', mt: 1 }}>
                                         Age: {candidate.age}
                                     </Typography>
-
                                     <Typography variant="body1" sx={{ fontFamily: 'Rajdhani, sans-serif', color: '#B4B4B4', mt: 1 }}>
                                         Qualification: {candidate.qualification}
                                     </Typography>
@@ -129,14 +122,14 @@ const ElectionPage = () => {
                                     </Button>
                                 </CardActions>
                             </Card>
-                        </Grid2>
+                        </Grid>
                     ))
                 ) : (
                     <Typography variant="h6" color="error">
                         No candidates found.
                     </Typography>
                 )}
-            </Grid2>
+            </Grid>
         </Container>
     );
 }
